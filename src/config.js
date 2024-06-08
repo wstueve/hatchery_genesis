@@ -26,8 +26,8 @@ const layerConfigurations = [
   {
     growEditionSizeTo: 200,
     layersOrder: [
-      { name: "backgrounds" },
-      { name: "eggs" },
+      { name: "background" },
+      { name: "egg" },
       { name: "mood" },
       { name: "tier" },
       { name: "type" },
@@ -46,7 +46,7 @@ const format = {
 };
 
 const gif = {
-  export: true,
+  export: false,
   repeat: 0,
   quality: 100,
   delay: 200,
