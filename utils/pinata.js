@@ -33,7 +33,7 @@ for (const file of files) {
     // update the _metadata.json file with the new IPFS hash by replacing ipfs:///70.png with the new url from pinata
     const rawdata = fs.readFileSync(`${buildDir}/json/_metadata.json`);
     const replaceText = `/${file}`;
-    const replacedData = rawdata.toString().replace(replaceText, result.IpfsHash);
+    const replacedData = rawdata.toString().replaceAll(replaceText, result.IpfsHash);
     fs.writeFileSync(`${buildDir}/json/_metadata.json`, replacedData);
     console.log("Updated metadata file with new IPFS hash for file", file);
   }).catch((err) => {
