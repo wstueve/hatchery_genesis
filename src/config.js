@@ -5,34 +5,32 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 const network = NETWORK.eth;
 
 // General metadata for Ethereum
-const namePrefix = "Your Collection";
-const description = "Remember to replace this description";
-const baseUri = "ipfs://NewUriToReplace";
+const namePrefix = "hatchable";
+const description = "A tribute and thank you to all of the early CNFT supporters!";
+const baseUri = "ipfs://";
 
 const solanaMetadata = {
-  symbol: "YC",
-  seller_fee_basis_points: 1000, // Define how much % you want from secondary market sales 1000 = 10%
-  external_url: "https://www.youtube.com/c/hashlipsnft",
+  symbol: "PET",
+  seller_fee_basis_points: 1500, // Define how much % you want from secondary market sales 1000 = 10%
+  external_url: "https://hatchable.me",
   creators: [
     {
-      address: "7fXNuer5sbZtaTEPhtJ5g5gNtuyRoKkvxdjEjEnPN4mC",
+      address: "addr_test1qr08vt287e6asm3apgez74asht9nz6d98ds9zef63cx3x4lr5dhtzzsetyy27fj5p8fk2a99jr87rnd09uve8778dzhsswvfme",
       share: 100,
     },
   ],
 };
 
-// If you have selected Solana then the collection starts from 0 automatically
+// If you have selected Solana then the collection starts from 0 automatically from layers folder
 const layerConfigurations = [
   {
-    growEditionSizeTo: 5,
+    growEditionSizeTo: 200,
     layersOrder: [
-      { name: "Background" },
-      { name: "Eyeball" },
-      { name: "Eye color" },
-      { name: "Iris" },
-      { name: "Shine" },
-      { name: "Bottom lid" },
-      { name: "Top lid" },
+      { name: "backgrounds" },
+      { name: "eggs" },
+      { name: "mood" },
+      { name: "tier" },
+      { name: "type" },
     ],
   },
 ];
@@ -48,10 +46,10 @@ const format = {
 };
 
 const gif = {
-  export: false,
+  export: true,
   repeat: 0,
   quality: 100,
-  delay: 500,
+  delay: 200,
 };
 
 const text = {
@@ -78,7 +76,9 @@ const background = {
   default: "#000000",
 };
 
-const extraMetadata = {};
+const extraMetadata = {
+  website: "https://hatchable.me",
+};
 
 const rarityDelimiter = "#";
 
