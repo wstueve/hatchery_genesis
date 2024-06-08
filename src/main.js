@@ -128,6 +128,38 @@ const drawBackground = () => {
   ctx.fillRect(0, 0, format.width, format.height);
 };
 
+function transformAttributes(data) {
+  return data.attributes.reduce((acc, item) => {
+      acc[item.trait_type] = item.value;
+      return acc;
+  }, {});
+}
+
+const addHatchableMetadata = (_dna, _edition) => {
+  const name = `${namePrefix} #${_edition}`;
+  const mediaType = "image/png";
+  const website = "https://hatchable.me";
+  const transformedAttributes = transformAttributes({attributes: attributesList});
+  let cardanoTempMetadata = {};
+  cardanoTempMetadata[name] = {
+    description: description,
+    image: `${baseUri}/${_edition}.png`,
+    mediaType: mediaType,
+    website: website,
+    files: [
+      {
+        src: `${baseUri}/${_edition}.png`,
+        name: name,
+        mediaType: mediaType
+      }
+    ],
+    ...transformedAttributes,
+    edition: _edition,
+  };
+  metadataList.push(cardanoTempMetadata);
+  attributesList = [];
+};
+
 const addMetadata = (_dna, _edition) => {
   let dateTime = Date.now();
   let tempMetadata = {
@@ -306,6 +338,27 @@ const writeMetaData = (_data) => {
   fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
 };
 
+const saveHatchableMetaDataSingleFile = (_editionCount) => {
+  let metadata = metadataList.find((meta) => {
+    for (let key in meta) {
+      if (meta[key].edition == _editionCount) {
+        return true;
+      }
+    }
+    return false;
+  });
+  debugLogs
+      ? console.log(
+          `Writing metadata for ${_editionCount}: ${JSON.stringify(metadata)}`
+      )
+      : null;
+  fs.writeFileSync(
+      `${buildDir}/json/${_editionCount}.json`,
+      JSON.stringify(metadata, null, 2)
+  );
+};
+
+
 const saveMetaDataSingleFile = (_editionCount) => {
   let metadata = metadataList.find((meta) => meta.edition == _editionCount);
   debugLogs
@@ -401,8 +454,8 @@ const startCreating = async () => {
             ? console.log("Editions left to create: ", abstractedIndexes)
             : null;
           saveImage(abstractedIndexes[0]);
-          addMetadata(newDna, abstractedIndexes[0]);
-          saveMetaDataSingleFile(abstractedIndexes[0]);
+          addHatchableMetadata(newDna, abstractedIndexes[0]);
+          saveHatchableMetaDataSingleFile(abstractedIndexes[0]);
           console.log(
             `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
               newDna
