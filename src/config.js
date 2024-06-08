@@ -8,6 +8,7 @@ const network = NETWORK.eth;
 const namePrefix = "hatchable";
 const description = "A tribute and thank you to all of the early CNFT supporters!";
 const baseUri = "ipfs://";
+const startEditionFrom = 70;
 
 const solanaMetadata = {
   symbol: "PET",
@@ -24,7 +25,7 @@ const solanaMetadata = {
 // If you have selected Solana then the collection starts from 0 automatically from layers folder
 const layerConfigurations = [
   {
-    growEditionSizeTo: 200,
+    growEditionSizeTo: 500,
     layersOrder: [
       { name: "background" },
       { name: "egg" },
@@ -119,4 +120,5 @@ module.exports = {
   solanaMetadata,
   gif,
   preview_gif,
+  startEditionFrom,
 };

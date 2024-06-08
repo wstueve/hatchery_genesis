@@ -1,6 +1,7 @@
 const basePath = process.cwd();
 const { NETWORK } = require(`${basePath}/constants/network.js`);
 const fs = require("fs");
+const { startEditionFrom } = require("./config");
 const sha1 = require(`${basePath}/node_modules/sha1`);
 const { createCanvas, loadImage } = require(`${basePath}/node_modules/canvas`);
 const buildDir = `${basePath}/build`;
@@ -142,14 +143,15 @@ const addHatchableMetadata = (_dna, _edition) => {
   const transformedAttributes = transformAttributes({attributes: attributesList});
   let cardanoTempMetadata = {};
   cardanoTempMetadata[name] = {
+    name: name,
     description: description,
     image: `${baseUri}/${_edition}.png`,
     mediaType: mediaType,
     website: website,
     files: [
       {
-        src: `${baseUri}/${_edition}.png`,
         name: name,
+        src: `${baseUri}/${_edition}.png`,
         mediaType: mediaType
       }
     ],
@@ -388,11 +390,11 @@ function shuffle(array) {
 
 const startCreating = async () => {
   let layerConfigIndex = 0;
-  let editionCount = 1;
+  let editionCount = startEditionFrom;
   let failedCount = 0;
   let abstractedIndexes = [];
   for (
-    let i = network == NETWORK.sol ? 0 : 1;
+    let i = network == NETWORK.sol ? 0 : startEditionFrom;
     i <= layerConfigurations[layerConfigurations.length - 1].growEditionSizeTo;
     i++
   ) {
