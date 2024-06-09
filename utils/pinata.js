@@ -20,25 +20,30 @@ const limiter = new Bottleneck({
 const files = fs.readdirSync(imageDir);
 
 for (const file of files) {
-  const readableStreamForFile = fs.createReadStream(`${imageDir}/${file}`);
-  // pin the file to IPFS and retry when rate limited
-  limiter.schedule(() => pinata.pinFileToIPFS(readableStreamForFile, {
-    pinataMetadata: {
-      name: `${namePrefix}_${file}`,
-    }
-  }).then((response) => {
-    console.log("Pinning response", response);
-    result = response;
-    console.log("IpfsHash", result.IpfsHash);
-    // update the _metadata.json file with the new IPFS hash by replacing ipfs:///70.png with the new url from pinata
-    const rawdata = fs.readFileSync(`${buildDir}/json/_metadata.json`);
-    const replaceText = `/${file}`;
-    const replacedData = rawdata.toString().replaceAll(replaceText, result.IpfsHash);
-    fs.writeFileSync(`${buildDir}/json/_metadata.json`, replacedData);
-    console.log("Updated metadata file with new IPFS hash for file", file);
-  }).catch((err) => {
-    throw err;
-  }));
+  if (!fs.existsSync(`${buildDir}/done/${file}.txt`)) {
+    const readableStreamForFile = fs.createReadStream(`${imageDir}/${file}`);
+    // pin the file to IPFS and retry when rate limited
+    limiter.schedule(() => pinata.pinFileToIPFS(readableStreamForFile, {
+      pinataMetadata: {
+        name: `${namePrefix}_${file}`,
+      }
 
-  console.log("Pinning file", file);
+    }).then((response) => {
+      result = response;
+      // update the _metadata.json file with the new IPFS hash by replacing ipfs:///70.png with the new url from pinata
+      const rawdata = fs.readFileSync(`${buildDir}/json/_metadata.json`);
+      const replaceText = `/${file}`;
+      const replacedData = rawdata.toString().replaceAll(replaceText, result.IpfsHash);
+      fs.writeFileSync(`${buildDir}/json/_metadata.json`, replacedData);
+      fs.writeFileSync(`${buildDir}/done/${file}.txt`, 'x');
+
+      console.log("Updated metadata file with new IPFS hash for file", file);
+    }).catch((err) => {
+      console.log("Error pinning file", file, err);
+    }));
+
+    console.log("Pinning file", file);
+  } else {
+    console.log("File already pinned", file);
+  }
 }

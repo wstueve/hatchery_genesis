@@ -25,7 +25,7 @@ const solanaMetadata = {
 // If you have selected Solana then the collection starts from 0 automatically from layers folder
 const layerConfigurations = [
   {
-    growEditionSizeTo: 500,
+    growEditionSizeTo: 25000,
     layersOrder: [
       { name: "background" },
       { name: "egg" },
@@ -41,8 +41,8 @@ const shuffleLayerConfigurations = false;
 const debugLogs = false;
 
 const format = {
-  width: 512,
-  height: 512,
+  width: 834,
+  height: 834,
   smoothing: false,
 };
 

@@ -143,3 +143,6 @@ dist
 
 # secrets
 secrets.js
+
+build*/
+pin.log
